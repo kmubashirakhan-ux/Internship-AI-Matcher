@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Internship AI Matcher - Internlytic</title>
+<style>
+:root{--teal:#14b8a6;--dark:#0f172a}
+body{font-family:system-ui,sans-serif;margin:0;background:#f8fafc;color:#0f172a}
+header{padding:16px 6%;display:flex;justify-content:space-between;background:white;border-bottom:1px solid #e2e8f0}
+.logo{font-weight:800;color:var(--teal)}
+.hero{padding:50px 6%;display:grid;grid-template-columns:1.2fr 0.8fr;gap:20px;background:white}
+.hero h1{font-size:38px;margin:0}
+.btn{background:var(--teal);color:white;padding:12px 22px;border:none;border-radius:10px;font-weight:600;cursor:pointer}
+.btn-o{border:1px solid #cbd5e1;background:white;padding:10px 18px;border-radius:10px;cursor:pointer}
+.card{background:white;border:1px solid #e2e8f0;border-radius:16px;padding:20px;box-shadow:0 4px 12px rgba(0,0,0,.04);margin-bottom:14px}
+.upload{border:2px dashed #94a3b8;border-radius:16px;padding:22px;text-align:center;background:#f1f5f9}
+.chip{display:inline-block;padding:6px 12px;border:1px solid #cbd5e1;border-radius:20px;margin:4px;cursor:pointer;font-size:13px}
+.chip.active{background:var(--teal);color:white;border-color:var(--teal)}
+.badge{background:var(--teal);color:white;padding:4px 10px;border-radius:20px;font-size:12px;float:right}
+.progress{height:8px;background:#e2e8f0;border-radius:10px;overflow:hidden;margin:8px 0}
+.progress div{height:100%;background:var(--teal)}
+.small{font-size:12px;color:#64748b}
+.alert{background:#ecfeff;border:1px solid #99f6e0;padding:10px;border-radius:8px;font-size:12px;color:#0e7490}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+@media(max-width:800px){.hero{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="logo">⬢ INTERNLYTIC</div><div class="small">Phase 2 • AI & ML • Deadline 15 Nov 2026</div></header>
+<div class="hero">
+<div>
+<h1>AI INTERNSHIP MATCHER</h1>
+<p>Upload CV (PDF/DOCX), parse skills with AI/ML, match with verified catalogue. Transparent scoring.</p>
+<button class="btn" onclick="document.getElementById('app').scrollIntoView({behavior:'smooth'})">Find My Internship →</button>
+<button class="btn-o" onclick="document.getElementById('catalogue').scrollIntoView({behavior:'smooth'})">Explore Catalogue</button>
+<div class="alert" style="margin-top:14px"><b>Crucial Rule:</b> All from verified catalogue.json. Score = (Matched/Total)*100. No fake programs. <br><b>Privacy:</b> CV processed locally, not stored.</div>
+</div>
+<div class="card">
+<h3 style="margin-top:0">User Journey</h3>
+<b>01. Upload</b><p class="small">CV Parsing PDF/DOCX</p>
+<b>02. Profile</b><p class="small">Skill Tagger</p>
+<b>03. Match</b><p class="small">AI checks rules vs DB</p>
+<b>04. Results</b><p class="small">Top matches + Apply links</p>
+</div>
+</div>
+
+<div id="app" style="padding:30px 6%;display:grid;grid-template-columns:1.2fr 0.8fr;gap:20px">
+<div class="card">
+<h2>B. Profile Input & CV Parsing</h2>
+<div class="upload">
+<strong>Drop CV here or click to upload</strong><br><span class="small">PDF/DOCX only</span><br><br>
+<input type="file" id="cvFile" accept=".pdf,.docx" hidden>
+<button class="btn-o" onclick="document.getElementById('cvFile').click()">Choose File</button>
+<p id="fileName" class="small"></p>
+<p id="parseStatus" class="small" style="color:#0ea5a0"></p>
+</div>
+<h3>Manual Skill Tagging (Fallback)</h3>
+<div id="skillsBox"></div><br>
+<label class="small">Experience:</label>
+<select id="expLevel" class="btn-o"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select><br><br>
+<button class="btn" onclick="runMatch()">Run AI Matching Engine →</button>
+<p id="err" style="color:#dc2626" class="small"></p>
+</div>
+<div class="card">
+<h3>Active Profile</h3><div id="active" class="small">No skills yet</div><hr>
+<h4>Transparent Scoring Logic</h4><p class="small">For each verified program:<br><b>compatibility = (matching_required_skills / total_required) * 100</b><br>Example: 3/5 = 60%<br>Missing shown as Skills to Strengthen.</p>
+</div>
+</div>
+
+<div id="resultsSection" style="padding:20px 6%;display:none">
+<h2>D. Dynamic Results Dashboard - Top 1-3 Matches</h2><div id="results"></div>
+</div>
+
+<div id="catalogue" style="padding:20px 6%">
+<h2>Secondary Catalogue Exploration (Verified)</h2><div class="grid" id="catGrid"></div>
+</div>
+
+<script>
+const ALL=["HTML","CSS","JavaScript","React","Responsive Design","Python","Flask","SQL","REST APIs","Git","Machine Learning","Pandas","NumPy","Scikit-Learn","Data Analysis","Tableau","Statistics","Flutter","Dart","Firebase","Docker","Linux","AWS","CI/CD","Deep Learning","TensorFlow","Figma","UI Design","UX Research"];
+let sel=new Set();
+function render(){let b=document.getElementById('skillsBox');b.innerHTML='';ALL.forEach(s=>{let d=document.createElement('span');d.className='chip'+(sel.has(s)?' active':'');d.textContent=s;d.onclick=()=>{sel.has(s)?sel.delete(s):sel.add(s);upd();render();};b.appendChild(d);});}
+function upd(){document.getElementById('active').innerHTML=sel.size?Array.from(sel).map(s=>`<span class="chip active">${s}</span>`).join(''):'No skills yet';}
+render();
+document.getElementById('cvFile').addEventListener('change',async e=>{let file=e.target.files[0];if(!file)return;document.getElementById('fileName').textContent=file.name;document.getElementById('parseStatus').textContent='Parsing...';let fd=new FormData();fd.append('cv',file);try{let r=await fetch('/api/parse',{method:'POST',body:fd});let d=await r.json();document.getElementById('parseStatus').textContent=`Extracted ${d.extracted_skills.length} skills`;d.extracted_skills.forEach(s=>sel.add(s));upd();render();}catch{document.getElementById('parseStatus').textContent='Error, use manual tagging';}});
+async function runMatch(){if(sel.size==0){document.getElementById('err').textContent='Select at least 1 skill';return;}document.getElementById('err').textContent='';let r=await fetch('/api/match',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({skills:Array.from(sel)})});let data=await r.json();let div=document.getElementById('results');div.innerHTML='';data.matches.forEach(m=>{let p=m.program;div.innerHTML+=`<div class="card" style="border-left:4px solid #14b8a6"><span class="badge">${m.score}% Match</span><h3 style="margin:0">${p.official_name}</h3><p class="small">${p.track} • ${p.eligibility} • ${p.status}</p><div class="progress"><div style="width:${m.score}%"></div></div><p><b>Why it matches:</b> ${m.why}</p><p style="color:#0e7490"><b>Matching Skills:</b> ${m.matching_skills.join(', ')||'None'}</p><p style="color:#c2410c"><b>Skills to Strengthen:</b> ${m.missing_skills.join(', ')||'All good!'}</p><p class="small"><b>Prerequisites:</b> ${p.prerequisites.join(', ')}</p><a href="${p.apply_url}" target="_blank" class="btn" style="text-decoration:none;display:inline-block">Apply via Verified Link →</a></div>`;});document.getElementById('resultsSection').style.display='block';document.getElementById('resultsSection').scrollIntoView({behavior:'smooth'});}
+fetch('/catalogue.json').then(r=>r.json()).then(progs=>{let g=document.getElementById('catGrid');progs.forEach(p=>{g.innerHTML+=`<div class="card"><h4 style="margin:0">${p.official_name}</h4><p class="small">${p.track}</p><p class="small">${p.required_skills.join(', ')}</p><a href="${p.apply_url}" target="_blank" class="small" style="color:#14b8a6">Apply Link</a></div>`;});});
+</script>
+</body>
+</html>

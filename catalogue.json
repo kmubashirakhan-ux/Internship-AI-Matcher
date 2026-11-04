@@ -1,0 +1,42 @@
+[
+  {
+    "id": "frontend_01",
+    "official_name": "Frontend Development Internship",
+    "track": "Web Development",
+    "required_skills": ["HTML", "CSS", "JavaScript", "React", "Responsive Design"],
+    "eligibility": "CS/IT Students",
+    "prerequisites": ["Git", "Browser DevTools"],
+    "status": "Active",
+    "apply_url": "https://internshala.com/internships/frontend-development/"
+  },
+  {
+    "id": "backend_01",
+    "official_name": "Backend Development Internship",
+    "track": "Web Development",
+    "required_skills": ["Python", "Flask", "SQL", "REST APIs", "Git"],
+    "eligibility": "CS/SE Students",
+    "prerequisites": ["Database Basics", "Python"],
+    "status": "Active",
+    "apply_url": "https://internshala.com/internships/backend-development/"
+  },
+  {
+    "id": "ml_01",
+    "official_name": "Machine Learning Internship",
+    "track": "AI & ML",
+    "required_skills": ["Python", "Machine Learning", "Pandas", "NumPy", "Scikit-Learn"],
+    "eligibility": "Students with ML coursework",
+    "prerequisites": ["Statistics", "Python for Data Science"],
+    "status": "Active",
+    "apply_url": "https://www.linkedin.com/jobs/search/?keywords=Machine%20Learning%20Intern"
+  },
+  {
+    "id": "data_sci_01",
+    "official_name": "Data Science Internship",
+    "track": "Data Science",
+    "required_skills": ["Python", "SQL", "Data Analysis", "Tableau", "Statistics"],
+    "eligibility": "Data Science Students",
+    "prerequisites": ["Excel", "SQL Queries"],
+    "status": "Active",
+    "apply_url": "https://internshala.com/internships/data-science/"
+  }
+]
